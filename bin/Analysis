@@ -1,0 +1,109 @@
+Part A: Brute Force vs Map
+
+In these questions, you will examine how the k-value/order of the model, the length of the training text, and the number of letter/work generated affect the runtime for both the BruteTextGenerator and the MapTextGenerator.
+
+Form a hypothesis about how each of the following three factors should affect the runtime of BruteGenerator and MapGenerator in big-O notation and explain your reasoning by referencing segments of your code.
+
+the length of the training text
+the k-value or length of the word
+the length of the random text
+
+Answer:
+	1)The length of the training text will increase the runtime of both BruteGenerator and MapGenerator. The big O for this is constant, so the constant number will just be greater.
+
+	2)If you increase the k-value or the length of the word, the runtime will decrease because you have to iterate over less items in the list. I predict that the O will go down logarithmically. I think that the change will be the same for both MapGenerator and BruteGenerator.
+	
+	2)If you increase the length of the random text, you will end up with a much longer runtime in BruteGenerator, and a barely affected runtime in Map Generator. This is because a whole new list has to be built based on the seed for every character or word that is added to the list in BruteGenerator. In MapGenerator, all the program has to do is to consult the already created map.
+
+
+Results:
+	
+	1) For MapGenerator, increasing the file length causes the time to increase overall, but between some of the smaller length change intervals, the time actually seems to go down. However, the time clearly ends higher than it started. For BruteGenerator, as the file length increases, the runtime increases exponentially. It ends close to 4 seconds and starts at .03 seconds. I think this is because the entire text file has to queried through a for loop every time that the program runs.  
+	
+	2) For MapGenerator, increasing K causes the runtime to go down until the k value hits 11, then the runtime starts to slowly climb once again, but it ends significantly lower than the runtime for k=1. For BruteGenerator, as the k increases, so does the runtime. This is the opposite of what I predicted. The K varies a bit throughout the test, but definitely ends up being higher at the end. However, the change is somewhat small(around .4 seconds)
+	
+	3) For MapGenerator, increasing the length of the pseudorandom text that is generated causes the runtime to increase in a similar way to the varying of k. As an overall trend it clearly increases, however across some intervals, it goes down when the length goes up. This discrepancy is likley due to the randomness of the text, but it should be more standard for MapGenerator than BruteGenerator. For BruteGenerator, the runtime increases by a constant when the length of the generated text increases. It seems to increase by around .5 seconds for each additional 20. There is no variation in this pattern throughout the test. 
+
+
+Run the Benchmark class on both BruteGenerator and MapGenerator to get empirical data to test your hypothesis. Running the Benchmark class once should be sufficient to generate quality data. Running Benchmark will likely take a very long time especially for BruteGenerator, so be patient. Compare your empirical results to your hypothesis.
+
+Part B: HashMap VS. TreeMap
+
+In these questions, the goal is to compare the different kinds of Maps, so you will only run the MapGenerator through Benchmark. You will examine the performance of HashMap both with a good hash function and bad one, and a TreeMap on different number of keys from the training text. Note that for this section only data from the last segment of Benchmark output is relevant.
+
+Form a hypothesis of how the number of keys will affect the runtime of MapGenerator when using the following types of Maps. Use big-O notation and explain your reasoning by referencing Map implementations and collisions.
+
+
+HashMap with the default hashCode function (always return a constant)
+HashMap with the hashCode function you wrote
+TreeMap
+Run the Benchmark class on MapGenerator class and examine the data from the final table to get empirical data to test your hypothesis. Running the Benchmark class once should be sufficient. Compare your empirical results to your hypothesis.
+
+
+Hypotheses:
+
+	1) The default hashCode function will have an increased runtime with an increase in the number of keys. 
+	Not only will there more keys that have to be processed, there will be more collisions with the default hashCode. 
+	Thus, the big O which is originally O(n) will increase by more than a constant, but not enough to be O(n^2).
+	
+	2) The runtime with the hashCode function that I wrote will change slightly less than the default hashCode function. 
+	Because there are very limited collisions in my hashCode, if any, the increase in time will be a constant increase in big O
+	that is proportional to the increase in number of unique keys. This is because the number of collisions is not going to 
+	increase the runtime at all because there is no increase in collisions.
+	
+	3) If my hashCode works well and the keys are distributed well in the HashMap then the TreeMap will be slower in terms of 
+	runtime. A TreeMap basically guarantees a O(log n) for lookup, but a properly coded hashCode combined with a HashMap can
+	result in big O of a constant which is ideal because the number of keys does not matter.  
+
+Results:
+	
+	1) The runtime seems to be around O(log n) for the increase in keys. It goes from .000084 to .000172 when the key value quadruples. However, over some intervals it goes down. In the end, the trend is clearly upwards in terms of the increase in keys.
+		
+			Varying file length, using k 5 and text length 100
+		unique keys: 2694 	 mean: 0.000049 	 stddev 0.000000 	 ci: [0.000049, 0.000049]
+		unique keys: 2982 	 mean: 0.000044 	 stddev 0.000000 	 ci: [0.000044, 0.000044]
+		unique keys: 3939 	 mean: 0.000058 	 stddev 0.000000 	 ci: [0.000058, 0.000058]
+		unique keys: 7499 	 mean: 0.000064 	 stddev 0.000000 	 ci: [0.000064, 0.000064]
+		unique keys: 7777 	 mean: 0.000066 	 stddev 0.000000 	 ci: [0.000066, 0.000066]
+		unique keys: 28046 	 mean: 0.000117 	 stddev 0.000000 	 ci: [0.000117, 0.000117]
+		unique keys: 35722 	 mean: 0.000118 	 stddev 0.000000 	 ci: [0.000118, 0.000118]
+		unique keys: 41306 	 mean: 0.000120 	 stddev 0.000000 	 ci: [0.000120, 0.000120]
+		unique keys: 68922 	 mean: 0.000140 	 stddev 0.000000 	 ci: [0.000140, 0.000140]
+	2) The runtime seems to increase at about the same rate for both this hashCode and the other hashCode, which leads me to 
+		believe that the collisions are minimal in the tester or that the amount of collisions does not affect the runtime,
+		but I believe that it is the former. It was mentioned in the assignment that the collisions may not arise in the testers
+		thus, there would not be a change in the runtime. 
+	
+			Varying file length, using k 5 and text length 100
+		unique keys: 2694 	 mean: 0.000066 	 stddev 0.000000 	 ci: [0.000066, 0.000066]
+		unique keys: 2982 	 mean: 0.000049 	 stddev 0.000000 	 ci: [0.000049, 0.000049]
+		unique keys: 3939 	 mean: 0.000044 	 stddev 0.000000 	 ci: [0.000044, 0.000044]
+		unique keys: 7499 	 mean: 0.000074 	 stddev 0.000000 	 ci: [0.000074, 0.000074]
+		unique keys: 7777 	 mean: 0.000087 	 stddev 0.000000 	 ci: [0.000087, 0.000087]
+		unique keys: 28046 	 mean: 0.000115 	 stddev 0.000000 	 ci: [0.000115, 0.000115]
+		unique keys: 35722 	 mean: 0.000116 	 stddev 0.000000 	 ci: [0.000116, 0.000116]
+		unique keys: 41306 	 mean: 0.000133 	 stddev 0.000000 	 ci: [0.000133, 0.000133]
+		unique keys: 68922 	 mean: 0.000140 	 stddev 0.000000 	 ci: [0.000140, 0.000140]
+		unique keys: 143749 	 mean: 0.000193 	 stddev 0.000000 	 ci: [0.000193, 0.000193]
+		
+	3) The initial value of this runtime is higher than the one for the HashMap which makes sense given the default run time
+		being O(log n). It also seems to increase at that rate, and ends at almost double the hashmap code. Although the test
+		does not go higher than 143,749 unique keys, it will likely never be more efficient to use a TreeMap for this problem.
+	
+			Varying file length, using k 5 and text length 100
+		unique keys: 2694 	 mean: 0.000179 	 stddev 0.000000 	 ci: [0.000179, 0.000179]
+		unique keys: 2982 	 mean: 0.000157 	 stddev 0.000000 	 ci: [0.000157, 0.000157]
+		unique keys: 3939 	 mean: 0.000159 	 stddev 0.000000 	 ci: [0.000159, 0.000159]
+		unique keys: 7499 	 mean: 0.000225 	 stddev 0.000000 	 ci: [0.000225, 0.000225]
+		unique keys: 7777 	 mean: 0.000242 	 stddev 0.000000 	 ci: [0.000242, 0.000242]
+		unique keys: 28046 	 mean: 0.000274 	 stddev 0.000000 	 ci: [0.000274, 0.000274]
+		unique keys: 35722 	 mean: 0.000460 	 stddev 0.000000 	 ci: [0.000460, 0.000460]
+		unique keys: 41306 	 mean: 0.000689 	 stddev 0.000000 	 ci: [0.000689, 0.000689]
+		unique keys: 68922 	 mean: 0.000329 	 stddev 0.000000 	 ci: [0.000329, 0.000329]
+		unique keys: 143749 	 mean: 0.000408 	 stddev 0.000000 	 ci: [0.000408, 0.000408]
+	
+	
+	
+	
+	
+	
